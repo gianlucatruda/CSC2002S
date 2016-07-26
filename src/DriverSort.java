@@ -1,3 +1,6 @@
+
+import java.util.concurrent.*;
+
 /**
  *
  * @author gianlucatruda
@@ -25,6 +28,18 @@ public class DriverSort {
             if(args.length > 0) {System.out.println("Too few parameters! \n <sort> <arraySizeMin> <arraySizeMax> <arraySizeIncr> <outFileName>");}
             System.out.println("Instance : " + SORT +"; " + ARRAYSIZEMIN +"; " + ARRAYSIZEMAX +"; " + ARRAYSIZEINCR +"; " + OUTFILENAME);
         }
+        
+        //If statements to run the appropriate sort based on user parameters from command line
+        if(SORT.equals("Quicksort") || SORT.equals("quicksort")){
+            
+        }
+        if(SORT.equals("Mergesort") || SORT.equals("mergesort")){
+            
+        }
+        if(SORT.equals("Altsort") || SORT.equals("altsort")){
+            
+        }
+        
     }
     
 }
