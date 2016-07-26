@@ -30,17 +30,15 @@ vpath %.class $(BINDIR):
 #default rule - will be invoked by make
 
 
-all: 	WordType.class \
-		Definition.class \
-		Entry.class \
-		ChainedEntry.class \
+all: 	MergesortParallel.class QuicksortParallel.class AltsortParallel.class \
+		DriverSort.class \
 		
 # Rules for generating documentation
 doc:
 	javadoc -d $(DOCDIR) $(SRCDIR)/*.java $(TESTDIR)/*.java
 
 # Rules for unit testing
-test_classes: all AbstractHashTableTest.class LPHashTableTest.class QPHashTableTest.class SCHashTableTest.class LoadTestTest.class SearchTestTest.class TestSuite.class 
+test_classes: all MergesortParallel.class AltsortParallel.class QuicksortParallel.class DriverSort.class
 
 test: test_classes
 	java -ea -cp $(BINDIR):$(JUNIT) org.junit.runner.JUnitCore TestSuite
