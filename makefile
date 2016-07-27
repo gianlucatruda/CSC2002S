@@ -32,13 +32,14 @@ vpath %.class $(BINDIR):
 
 all: 	MergesortParallel.class QuicksortParallel.class AltsortParallel.class \
 		DriverSort.class \
+		TestMergesortParallel.class TestQuicksortParallel.class TestAltsortParallel.class \
 		
 # Rules for generating documentation
 doc:
 	javadoc -d $(DOCDIR) $(SRCDIR)/*.java $(TESTDIR)/*.java
 
 # Rules for unit testing
-test_classes: all MergesortParallel.class AltsortParallel.class QuicksortParallel.class DriverSort.class
+test_classes: all MergesortParallel.class AltsortParallel.class QuicksortParallel.class DriverSort.class 
 
 test: test_classes
 	java -ea -cp $(BINDIR):$(JUNIT) org.junit.runner.JUnitCore TestSuite

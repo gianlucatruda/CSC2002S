@@ -26,20 +26,55 @@ public class MergesortParallel extends RecursiveAction{
     @Override
     protected void compute() {
         //If statement to catch the instance where the threshold has been reached and to perform a sequential sort.
-        if(end - begin <= thresh){
+        if((end-begin) <= thresh){
             //A system-implemented sequential sort over the range provided.
             Arrays.sort(arr, begin, end);
         }
         else{
             //Parallel code to sort the two halves in parallel
+            int mid = (begin + (end - begin)/2);
+            invokeAll(      //Executes the given tasks, returning a list of Futures holding their status and results when all complete. Future.isDone() is true for each element of the returned list.
+                    new MergesortParallel(arr, begin, mid, thresh),
+                    new MergesortParallel(arr, mid, end, thresh)
+            );
             
+            //Sequential merge of the two halves
+            merge(mid);
             
         }
+            
         
-        
-        
-        //Sequential merge of the two halves
-        
+    }
+    
+    private void merge(int m){
+        int[] clone = arr.clone();
+        int firstLeft = 0;
+        int lastLeft = m-1;
+        int firstRight = m;
+        int lastRight = arr.length-1;
+        int current = 0;
+        System.out.println(firstLeft+" "+lastLeft+" - "+firstRight+" "+lastRight);
+        //System.out.println(Arrays.toString(clone));
+        while(firstLeft <= lastLeft && firstRight <= lastRight){
+            //System.out.println(Arrays.toString(arr));
+            if(clone[firstLeft]<= clone[firstRight]){
+                arr[current] = clone[firstLeft];
+                current++;
+                firstLeft++;
+            }
+            else{
+                arr[current] = clone[firstRight];
+                current++;
+                firstRight++;
+            }
+            
+        }
+        if(firstLeft <= lastLeft){
+            arr[current] = clone[firstLeft];
+        }
+        else if(firstRight <= lastRight){
+            arr[current] = clone[firstRight]; 
+       }
         
     }
     

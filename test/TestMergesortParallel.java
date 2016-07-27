@@ -4,6 +4,8 @@
  * and open the template in the editor.
  */
 
+import java.util.Arrays;
+import java.util.Random;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -37,9 +39,26 @@ public class TestMergesortParallel {
     }
 
     @Test
-    public void testSomeMethod() {
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+    public void testCompute() {
+        final int ARRLEN = 20;
+        final int THRESH = 100;
+        Random rand = new Random();
+        int[] arr = new int[ARRLEN];
+        for(int i=0; i<ARRLEN; i++){
+            arr[i]=rand.nextInt(ARRLEN);
+        }
+        int[] sysArr = arr.clone();
+        Arrays.sort(sysArr);
+        MergesortParallel msp = new MergesortParallel(arr, 0, ARRLEN, THRESH);
+        int trueCount = 0;
+        for(int i=0; i<ARRLEN; i++){
+            if(sysArr[i]==arr[i]){trueCount++;}
+        }
+        System.out.println("Correctness: "+(trueCount*100/ARRLEN)+"%");
+        System.out.println(Arrays.toString(sysArr));
+        System.out.println(Arrays.toString(arr));
+        assert(Arrays.equals(sysArr, arr));
+
     }
     
 }

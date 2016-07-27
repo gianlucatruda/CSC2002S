@@ -1,5 +1,8 @@
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.concurrent.*;
+import java.util.Random;
 
 /**
  *
@@ -8,9 +11,10 @@ import java.util.concurrent.*;
  */
 public class DriverSort {
     
+    @SuppressWarnings("empty-statement")
     public static void main(String[] args){
         //Initialising important variables and assigning them default values
-        String SORT = "Quicksort";
+        String SORT = "Mergesort";
         int ARRAYSIZEMIN = 10000;
         int ARRAYSIZEMAX = 100000;
         int ARRAYSIZEINCR = 10000;
@@ -40,6 +44,31 @@ public class DriverSort {
             
         }
         
+        //This is just code playing around with System.currentTimeMillis() to learn
+        long time = System.currentTimeMillis();
+        for(int i=0; i<1000000000; i++){
+            i =i;
+        }
+        
+        System.out.println(System.currentTimeMillis() - time + " ms.");
+        
+        //int[] arr = {8,3,5,7,1,4,2,6,9};
+        int[] arr = new int[20];
+        Random rand = new Random();
+        for(int i=0; i<20; i++){
+            arr[i] = rand.nextInt(100);
+        }
+        System.out.println(Arrays.toString(arr));
+        
+        MergesortParallel merge = new MergesortParallel(arr, 0, arr.length, 4);
+        merge.compute();
+        System.out.println(Arrays.toString(arr));
+        
+        /**
+         * Call System.gc() to minimize the likelihood that the garbage 
+         * collector will run during your execution 
+         * (but do not call this within your timing block!).
+        */
     }
     
 }
