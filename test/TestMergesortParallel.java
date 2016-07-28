@@ -41,7 +41,7 @@ public class TestMergesortParallel {
     @Test
     public void testCompute() {
         final int ARRLEN = 20;
-        final int THRESH = 100;
+        final int THRESH = 10;
         Random rand = new Random();
         int[] arr = new int[ARRLEN];
         for(int i=0; i<ARRLEN; i++){
@@ -50,6 +50,7 @@ public class TestMergesortParallel {
         int[] sysArr = arr.clone();
         Arrays.sort(sysArr);
         MergesortParallel msp = new MergesortParallel(arr, 0, ARRLEN, THRESH);
+        msp.compute();
         int trueCount = 0;
         for(int i=0; i<ARRLEN; i++){
             if(sysArr[i]==arr[i]){trueCount++;}

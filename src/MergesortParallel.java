@@ -9,9 +9,9 @@ import java.util.concurrent.*;
  */
 public class MergesortParallel extends RecursiveAction{
     //Declaration of the private variables for a Mergesort object
-    private int[] arr;
-    private int begin, end;
-    private int thresh;
+    private final int[] arr;
+    private final int begin, end;
+    private final int thresh;
     
     //Constructor method for MergesortParallel
     public MergesortParallel(int[] a, int begin, int end, int threshold){
@@ -29,6 +29,7 @@ public class MergesortParallel extends RecursiveAction{
         if((end-begin) <= thresh){
             //A system-implemented sequential sort over the range provided.
             Arrays.sort(arr, begin, end);
+            //System.out.println("Sys");
         }
         else{
             //Parallel code to sort the two halves in parallel
@@ -40,10 +41,7 @@ public class MergesortParallel extends RecursiveAction{
             
             //Sequential merge of the two halves
             merge(mid);
-            
         }
-            
-        
     }
     
     private void merge(int m){
@@ -53,7 +51,7 @@ public class MergesortParallel extends RecursiveAction{
         int firstRight = m;
         int lastRight = arr.length-1;
         int current = 0;
-        System.out.println(firstLeft+" "+lastLeft+" - "+firstRight+" "+lastRight);
+        //System.out.println(firstLeft+" "+lastLeft+" - "+firstRight+" "+lastRight);
         //System.out.println(Arrays.toString(clone));
         while(firstLeft <= lastLeft && firstRight <= lastRight){
             //System.out.println(Arrays.toString(arr));
@@ -69,13 +67,8 @@ public class MergesortParallel extends RecursiveAction{
             }
             
         }
-        if(firstLeft <= lastLeft){
-            arr[current] = clone[firstLeft];
-        }
-        else if(firstRight <= lastRight){
-            arr[current] = clone[firstRight]; 
-       }
-        
+       
+       
     }
     
 }
