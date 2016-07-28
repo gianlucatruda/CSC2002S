@@ -14,10 +14,10 @@ public class DriverSort {
     @SuppressWarnings("empty-statement")
     public static void main(String[] args){
         //Initialising important variables and assigning them default values
-        String SORT = "Mergesort";
+        String SORT = "System";
         int ARRAYSIZEMIN = 10000;
-        int ARRAYSIZEMAX = 100000;
-        int ARRAYSIZEINCR = 10000;
+        int ARRAYSIZEMAX = 10000000;
+        int ARRAYSIZEINCR = 1000000;
         String OUTFILENAME = "data.txt";
         
         //Getting the commandline arguments from the user
@@ -33,36 +33,42 @@ public class DriverSort {
             System.out.println("Instance : " + SORT +"; " + ARRAYSIZEMIN +"; " + ARRAYSIZEMAX +"; " + ARRAYSIZEINCR +"; " + OUTFILENAME);
         }
         
-        //If statements to run the appropriate sort based on user parameters from command line
-        if(SORT.equals("Quicksort") || SORT.equals("quicksort")){
-            
-        }
-        if(SORT.equals("Mergesort") || SORT.equals("mergesort")){
-            
-        }
-        if(SORT.equals("Altsort") || SORT.equals("altsort")){
-            
-        }
-        
-        //This is just code playing around with System.currentTimeMillis() to learn
-        long time = System.currentTimeMillis();
-        for(int i=0; i<1000000000; i++){
-            i =i;
-        }
-        
-        System.out.println(System.currentTimeMillis() - time + " ms.");
-        
-        //int[] arr = {8,3,5,7,1,4,2,6,9};
-        int[] arr = new int[20];
+        //Variables to implement across all testing
+        int[] arr;
         Random rand = new Random();
-        for(int i=0; i<20; i++){
-            arr[i] = rand.nextInt(100);
-        }
-        System.out.println(Arrays.toString(arr));
+        int elementSize = 1000000;
+        int repeats = 5;
         
-        MergesortParallel merge = new MergesortParallel(arr, 0, arr.length, 4);
-        merge.compute();
-        System.out.println(Arrays.toString(arr));
+        for(int arraySize=ARRAYSIZEMIN; arraySize<ARRAYSIZEMAX; arraySize=arraySize+ARRAYSIZEINCR){
+                arr = new int[arraySize];
+                for(int i=0; i<arraySize; i++){
+                    arr[i]=rand.nextInt(elementSize);
+                }
+                System.out.print("Size: "+arraySize);
+                for(int i=0; i<repeats; i++){
+                    //Garbage collection called to avoid it slowing down the testing
+                    System.gc();
+                    long tick = getTime();
+                    //If statements to run the appropriate sort based on user parameters from command line
+                    if(SORT.equals("Quicksort") || SORT.equals("quicksort")){
+
+                    }
+                    if(SORT.equals("Mergesort") || SORT.equals("mergesort")){
+
+                    }
+                    if(SORT.equals("Altsort") || SORT.equals("altsort")){
+
+                    }
+                    if(SORT.equals("System") || SORT.equals("system")){
+                        Arrays.sort(arr);
+                    }
+                    int duration = (int)(getTime() - tick);
+                    System.out.print("\t"+duration+" ms");
+                }
+                System.out.print("\n");
+            }
+        
+        //Testing for Mergesort implementation
         
         /**
          * Call System.gc() to minimize the likelihood that the garbage 
@@ -71,4 +77,10 @@ public class DriverSort {
         */
     }
     
+    /**
+     * Returns the current time in milliseconds for purposes of timing.
+    */
+    public static long getTime(){
+        return System.currentTimeMillis();
+    }
 }
