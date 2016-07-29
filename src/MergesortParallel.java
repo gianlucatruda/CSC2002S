@@ -9,13 +9,15 @@ import java.util.concurrent.*;
  */
 public class MergesortParallel extends RecursiveAction{
     //Declaration of the private variables for a Mergesort object
-    private final int[] arr;
+    private int[] arr;
+    private int[] clone;
     private final int begin, end;
     private final int thresh;
     
     //Constructor method for MergesortParallel
     public MergesortParallel(int[] a, int begin, int end, int threshold){
         this.arr = a;
+        this.clone = arr.clone();
         this.begin = begin;
         this.end = end;
         this.thresh = threshold;
@@ -34,6 +36,8 @@ public class MergesortParallel extends RecursiveAction{
         else{
             //Parallel code to sort the two halves in parallel
             int mid = (begin + (end - begin)/2);
+            //System.out.println("T1\t"+begin+"\t"+mid+"\t"+thresh);
+            //System.out.println("T2\t"+mid+"\t"+end+"\t"+thresh);
             invokeAll(      //Executes the given tasks, returning a list of Futures holding their status and results when all complete. Future.isDone() is true for each element of the returned list.
                     new MergesortParallel(arr, begin, mid, thresh),
                     new MergesortParallel(arr, mid, end, thresh)
@@ -45,20 +49,18 @@ public class MergesortParallel extends RecursiveAction{
     }
     
     private void merge(int m){
-        int[] clone = arr.clone();
-        int firstLeft = 0;
+        int firstLeft = begin;
         int lastLeft = m-1;
         int firstRight = m;
         int lastRight = arr.length-1;
-        int current = 0;
-        //System.out.println(firstLeft+" "+lastLeft+" - "+firstRight+" "+lastRight);
-        //System.out.println(Arrays.toString(clone));
+        int current = begin;
         while(firstLeft <= lastLeft && firstRight <= lastRight){
-            //System.out.println(Arrays.toString(arr));
+            System.out.println(Arrays.toString(arr));
             if(clone[firstLeft]<= clone[firstRight]){
                 arr[current] = clone[firstLeft];
                 current++;
                 firstLeft++;
+               
             }
             else{
                 arr[current] = clone[firstRight];
@@ -67,7 +69,23 @@ public class MergesortParallel extends RecursiveAction{
             }
             
         }
-       
+        if(firstLeft <= lastLeft){
+            while(firstLeft<=lastLeft){
+                arr[current] = clone[firstLeft];
+                current++;
+                firstLeft++;
+            }
+            
+        }
+        else if(firstRight <= lastRight){
+            while(firstRight<=lastRight){
+                //System.out.println(firstRight+":"+lastRight);
+                arr[current] = clone[firstRight];
+                current++;
+                firstRight++;
+            }
+        }
+        System.out.println(firstLeft + ":"+ lastLeft+ " "+ firstRight +":"+lastRight);
        
     }
     
