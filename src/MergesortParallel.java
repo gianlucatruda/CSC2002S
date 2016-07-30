@@ -11,8 +11,7 @@ public class MergesortParallel extends RecursiveAction{
     //Declaration of the private variables for a Mergesort object
     private int[] arr;
     private int[] clone;
-    private final int begin, end;
-    private final int thresh;
+    private final int begin, end, thresh;
     
     //Constructor method for MergesortParallel
     public MergesortParallel(int[] a, int begin, int end, int threshold){

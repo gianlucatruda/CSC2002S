@@ -14,7 +14,7 @@ public class DriverSort {
     @SuppressWarnings("empty-statement")
     public static void main(String[] args) throws IOException{
         //Initialising important variables and assigning them default values
-        String SORT = "Mergesort";
+        String SORT = "Quicksort";
         int ARRAYSIZEMIN = 1000000;
         int ARRAYSIZEMAX = 10000000;
         int ARRAYSIZEINCR = 1000000;
@@ -39,7 +39,7 @@ public class DriverSort {
         long tick = 0;
         Random rand = new Random();
         int elementSize = 100000;
-        int repeats = 5;
+        int repeats = 2;
         
         //Code to perform generalised timing, with an imbedded if-net to only perform the user-specified sort on each run
         for(int arraySize=ARRAYSIZEMIN; arraySize<=ARRAYSIZEMAX; arraySize=arraySize+ARRAYSIZEINCR){
@@ -54,7 +54,9 @@ public class DriverSort {
                 System.gc();
                 //If statements to run the appropriate sort based on user parameters from command line
                 if(SORT.equals("Quicksort") || SORT.equals("quicksort")){
-
+                    QuicksortParallel qsp = new QuicksortParallel(arr, 0, arraySize, (int)(2500000));
+                    tick = getTime();
+                    qsp.compute();
                 }
                 if(SORT.equals("Mergesort") || SORT.equals("mergesort")){
                     MergesortParallel msp = new MergesortParallel(arr, 0, arraySize, (int)(2500000));
@@ -74,8 +76,7 @@ public class DriverSort {
             System.out.println(outText);
             writeToFile(OUTFILENAME, outText);
         }
-        
-        
+
     }
     
     /**
