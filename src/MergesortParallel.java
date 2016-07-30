@@ -17,12 +17,10 @@ public class MergesortParallel extends RecursiveAction{
     //Constructor method for MergesortParallel
     public MergesortParallel(int[] a, int begin, int end, int threshold){
         this.arr = a;
-        this.clone = arr.clone();
         this.begin = begin;
         this.end = end;
         this.thresh = threshold;
     }
-    
     
     //Override for the compute() method implemented from RecursiveAction (main body of code)
     @Override
@@ -31,19 +29,14 @@ public class MergesortParallel extends RecursiveAction{
         if((end-begin) <= thresh){
             //A system-implemented sequential sort over the range provided.
             Arrays.sort(arr, begin, end);
-            //System.out.println("Sys");
         }
         else{
             //Parallel code to sort the two halves in parallel
-            int mid = (begin + (end - begin)/2);
-            //System.out.println("T1\t"+begin+"\t"+mid+"\t"+thresh);
-            //System.out.println("T2\t"+mid+"\t"+end+"\t"+thresh);
-            invokeAll(      //Executes the given tasks, returning a list of Futures holding their status and results when all complete. Future.isDone() is true for each element of the returned list.
-                    new MergesortParallel(arr, begin, mid, thresh),
-                    new MergesortParallel(arr, mid, end, thresh)
-            );
+            int mid = begin + (end - begin)/2;
+            invokeAll(new MergesortParallel(arr, begin, mid, thresh),new MergesortParallel(arr, mid, arr.length, thresh));
             
             //Sequential merge of the two halves
+            this.clone = arr.clone();
             merge(mid);
         }
     }
@@ -55,38 +48,19 @@ public class MergesortParallel extends RecursiveAction{
         int lastRight = arr.length-1;
         int current = begin;
         while(firstLeft <= lastLeft && firstRight <= lastRight){
-            System.out.println(Arrays.toString(arr));
             if(clone[firstLeft]<= clone[firstRight]){
-                arr[current] = clone[firstLeft];
-                current++;
-                firstLeft++;
-               
+                arr[current++] = clone[firstLeft++];
             }
             else{
-                arr[current] = clone[firstRight];
-                current++;
-                firstRight++;
-            }
-            
-        }
-        if(firstLeft <= lastLeft){
-            while(firstLeft<=lastLeft){
-                arr[current] = clone[firstLeft];
-                current++;
-                firstLeft++;
-            }
-            
-        }
-        else if(firstRight <= lastRight){
-            while(firstRight<=lastRight){
-                //System.out.println(firstRight+":"+lastRight);
-                arr[current] = clone[firstRight];
-                current++;
-                firstRight++;
+                arr[current++] = clone[firstRight++];
             }
         }
-        System.out.println(firstLeft + ":"+ lastLeft+ " "+ firstRight +":"+lastRight);
-       
+        while(firstLeft<=lastLeft){
+            arr[current++] = clone[firstLeft++];
+        }
+           
+        while(firstRight<=lastRight){
+            arr[current++] = clone[firstRight++];
+        } 
     }
-    
 }

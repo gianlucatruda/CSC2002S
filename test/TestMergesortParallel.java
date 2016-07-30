@@ -40,9 +40,14 @@ public class TestMergesortParallel {
 
     @Test
     public void testCompute() {
-        final int ARRLEN = 20;
-        final int THRESH = 10;
+        final int ARRLEN = 40000;
+        final int THRESH = 20000;
         Random rand = new Random();
+        int[] sampleArr = {27, 43, 3, 9, 82, 10, 38};
+        MergesortParallel MSP = new MergesortParallel(sampleArr, 0, 6, 4);
+        MSP.compute();
+        System.out.println(Arrays.toString(sampleArr)+"\n\n");
+        
         int[] arr = new int[ARRLEN];
         for(int i=0; i<ARRLEN; i++){
             arr[i]=rand.nextInt(ARRLEN);
@@ -59,7 +64,6 @@ public class TestMergesortParallel {
         System.out.println(Arrays.toString(sysArr));
         System.out.println(Arrays.toString(arr));
         assert(Arrays.equals(sysArr, arr));
-
     }
     
 }
