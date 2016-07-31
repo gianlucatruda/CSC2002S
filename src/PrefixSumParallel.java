@@ -74,14 +74,14 @@ public class PrefixSumParallel extends RecursiveAction {
     
     public void apply(){
         if(this.leaf==true){
-            System.out.println("Leaf:\t"+this.fromLeft+"\t"+this.sum);
+            //System.out.println("Leaf:\t"+this.fromLeft+"\t"+this.sum);
             out[start] = this.fromLeft + this.arr[start];
             for (int i = start+1; i <=end; i++) {
                 this.out[i] = this.out[i-1] + this.arr[i];
             }
         }
         else{
-            System.out.println("Node:\t"+this.fromLeft+"\t"+this.sum);
+            //System.out.println("Node:\t"+this.fromLeft+"\t"+this.sum);
             leftC.apply();
             rightC.apply();
         }

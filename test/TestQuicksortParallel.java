@@ -28,7 +28,7 @@ public class TestQuicksortParallel {
         final int THRESH = 200000;
         Random rand = new Random();
         int[] sampleArr = {27, 43, 3, 9, 82, 10, 38};
-        QuicksortParallel QSP = new QuicksortParallel(sampleArr, 0, 6, 4);
+        QuicksortParallel QSP = new QuicksortParallel(sampleArr, 2);
         QSP.compute();
         System.out.println(Arrays.toString(sampleArr)+"\n\n");
         /*

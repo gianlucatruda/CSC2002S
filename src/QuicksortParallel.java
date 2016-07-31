@@ -53,8 +53,9 @@ public class QuicksortParallel extends RecursiveAction{
         }
         
         //Parallelised Prefix-Sum Algorithm
-        PrefixSumParallel pfp = new PrefixSumParallel(bits, bitsum, begin, end, null, 4, true);
-        invokeAll(pfp);
+        PrefixSumParallel pfp = new PrefixSumParallel(bits, bitsum, begin, end, null, thresh/4, true);
+        pfp.compute();
+        pfp.join();
         pfp.apply();
         
         //Create and populate the array of items creater than pivot value
@@ -70,7 +71,7 @@ public class QuicksortParallel extends RecursiveAction{
                 left[count++] = arr[i];
             }
         }
-        System.out.println(Arrays.toString(left)+"-"+val+"-"+Arrays.toString(right));
+        //System.out.println(Arrays.toString(left)+"-"+val+"-"+Arrays.toString(right));
         
         invokeAll(  new QuicksortParallel(left, thresh),
                     new QuicksortParallel(right, thresh));
