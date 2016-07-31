@@ -34,7 +34,7 @@ public class QuicksortParallel extends RecursiveAction{
         else{
             this.pivot = getMedian();
             //Perform a parallel pack
-            
+            this.pack(begin, end, 30);
         }
     }
     
@@ -45,17 +45,22 @@ public class QuicksortParallel extends RecursiveAction{
     private void pack(int start, int end, int val){
         int[] bits = new int[(end-start)+1];
         int[] bitsum = new int[bits.length];
-        for (int i = start; i < end; i++) {
-            if(arr[i]<val){
-                bits[i-start] = 0;
-            }
-            else if(arr[i]>= val){
+        for (int i = start; i <=end; i++) {
+            if(arr[i]>= val){
                 bits[i-start] = 1;
             }
+            else if(arr[i]<val){
+                bits[i-start] = 0;
+            }
         }
-        //Prefix-Sum Algorithm
-        
+        //Parallelised Prefix-Sum Algorithm
+        PrefixSumParallel pfp = new PrefixSumParallel(bits, bitsum, start, end, null, 4, true);
+        invokeAll(pfp);
+        pfp.apply();
+        System.out.println(Arrays.toString(bits));
+        System.out.println(Arrays.toString(bitsum));
     }
+    
     
     
     /**

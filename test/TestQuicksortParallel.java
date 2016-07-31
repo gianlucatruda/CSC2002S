@@ -31,7 +31,7 @@ public class TestQuicksortParallel {
         QuicksortParallel QSP = new QuicksortParallel(sampleArr, 0, 6, 4);
         QSP.compute();
         System.out.println(Arrays.toString(sampleArr)+"\n\n");
-        
+        /*
         int[] arr = new int[ARRLEN];
         for(int i=0; i<ARRLEN; i++){
             arr[i]=rand.nextInt(ARRLEN);
@@ -46,6 +46,7 @@ public class TestQuicksortParallel {
         }
         System.out.println("Correctness: "+(trueCount*100/ARRLEN)+"%");
         assert(Arrays.equals(sysArr, arr));
+        **/
     }
 
  }
