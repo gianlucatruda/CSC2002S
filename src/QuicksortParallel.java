@@ -32,13 +32,12 @@ public class QuicksortParallel extends RecursiveAction{
             Arrays.sort(arr, begin, end);
         }
         else{
-            this.pivot = getMedian();
+            //this.pivot = getMedian();
             //Perform a parallel pack
-            this.pack(begin, end, 27);
+            this.pack(begin, end, arr[pivot]);
         }
     }
-    
-    
+
     /**
      * A pack algorithm using the bit-bitsum-output method to enable parallelization.
      */
@@ -53,24 +52,42 @@ public class QuicksortParallel extends RecursiveAction{
                 bits[i-start] = 0;
             }
         }
+        
         //Parallelised Prefix-Sum Algorithm
         PrefixSumParallel pfp = new PrefixSumParallel(bits, bitsum, start, end, null, 4, true);
         invokeAll(pfp);
         pfp.apply();
-        System.out.println(Arrays.toString(arr));
-        System.out.println(Arrays.toString(bits));
-        System.out.println(Arrays.toString(bitsum));
         
         //Create and populate the array of items creater than pivot value
         int[] right = new int[bitsum[bitsum.length-1]];
+        int[] left = new int[(end-start)+1-right.length];//(end-start)-bitsum[bitsum.length-1]+1];
+        int count = 0;
         for (int i = 0; i < bitsum.length; i++) {
             if(bits[i]==1){
                 right[bitsum[i]-1] = arr[start + i];
             }
+            else{
+                //left[count++] = arr[start+i];
+            }
         }
         System.out.println(Arrays.toString(right));
+        System.out.println(Arrays.toString(left));
+        
+        invokeAll(  new QuicksortParallel(left, begin, pivot, thresh),
+                    new QuicksortParallel(right, pivot, end, thresh));
+        
+        int[] out = new int[left.length+right.length];
+        for (int i = 0; i < left.length; i++) {
+            out[i] = left[i];
+        }
+        for (int i = 0; i < right.length; i++) {
+            out[i+left.length] = right[i];
+        }
+        
+        System.out.println(Arrays.toString(out));
     }
     
+ 
     
     
     /**
