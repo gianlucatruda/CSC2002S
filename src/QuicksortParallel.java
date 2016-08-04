@@ -21,7 +21,7 @@ public class QuicksortParallel extends RecursiveAction{
         this.begin = 0;
         this.end = arr.length;
         this.thresh = thresh;
-        this.pivot = (end-begin)/2 +1;
+        
         //System.out.println("QS");
 }
     //Override for the compute() method implemented from RecursiveAction
@@ -53,11 +53,11 @@ public class QuicksortParallel extends RecursiveAction{
         serialPrefixSum(bits, bitsum);
         
         int[] right = new int[bitsum[bitsum.length-1]];
-        int[] left = new int[bitsum.length-right.length];
+        int[] left = new int[bitsum.length-right.length-1];
         
         int count = 0;
-        System.out.println(Arrays.toString(bits));
-        System.out.println(Arrays.toString(bitsum));
+        //System.out.println(Arrays.toString(bits));
+        //System.out.println(Arrays.toString(bitsum));
         for (int i = 0; i <arr.length; i++){          
             if(bits[i]==1){
                 right[bitsum[i]-1] = arr[i];
@@ -66,8 +66,20 @@ public class QuicksortParallel extends RecursiveAction{
                 left[count++] = arr[i];
             }
         }
+    
+        QuicksortParallel leftKid = new QuicksortParallel(left, this.thresh);
+        QuicksortParallel rightKid = new QuicksortParallel(right, this.thresh);
         
-        System.out.println(Arrays.toString(left) + " : "+pivVal+" : "+Arrays.toString(right));
+        invokeAll(leftKid, rightKid);
+        
+        //System.out.println(Arrays.toString(left) + " : "+pivVal+" : "+Arrays.toString(right));
+        
+        //System.out.println("Left = "+left.length+" right = " + right.length+" left+right = "+(left.length+right.length)+" Arr = "+arr.length);
+        System.arraycopy(left, 0, this.arr, 0, left.length);
+        for (int i = 0; i < right.length; i++) {
+            this.arr[i+left.length] = right[i];
+        }
+        
     }
     
     private void serialPrefixSum(int[] in, int[] out){
@@ -78,7 +90,37 @@ public class QuicksortParallel extends RecursiveAction{
         }
     
     }
-
+    
+    
+    /**
+     * Estimates the median of the array in O(c) time and returns the index of the median.
+     * @return pivot
+     */
+    private int getMedian(){
+        //Sneaky trick to select a pretty good privot in O(1) time.
+        Random rand = new Random();
+        int[] medianator = new int[3];
+        for (int i = 0; i <3; i++) {
+            medianator[i] = rand.nextInt(end);
+        }
+        int hi = medianator[0];
+        int lo = medianator[0];
+        int piv = medianator[0];
+        for (int i = 0; i < 3; i++) {
+            if(arr[medianator[i]]<= arr[hi] && arr[medianator[i]]>=arr[lo]){
+                piv = medianator[i];
+            }
+            if(arr[medianator[i]]>=arr[hi]){
+                hi = medianator[i];
+            }
+            if(arr[medianator[i]]<=arr[lo]){
+                lo = medianator[i];
+            }
+        }
+        //System.out.println(arr[medianator[0]]+";"+arr[medianator[1]]+";"+arr[medianator[2]]+" : "+piv+" : "+arr[piv]);
+        return piv;
+    }
+    
     /**
      * A pack algorithm using the bit-bitsum-output method to enable parallelization.
      */
@@ -138,35 +180,6 @@ public class QuicksortParallel extends RecursiveAction{
         System.arraycopy(right, 0, out, left.length, right.length);
         System.out.println("out: "+ Arrays.toString(out));
         this.arr = out.clone();
-    }
-    
-    /**
-     * Estimates the median of the array in O(c) time and returns the index of the median.
-     * @return pivot
-     */
-    private int getMedian(){
-        //Sneaky trick to select a pretty good privot in O(1) time.
-        Random rand = new Random();
-        int[] medianator = new int[3];
-        for (int i = 0; i <3; i++) {
-            medianator[i] = rand.nextInt(end);
-        }
-        int hi = medianator[0];
-        int lo = medianator[0];
-        int piv = medianator[0];
-        for (int i = 0; i < 3; i++) {
-            if(arr[medianator[i]]<= arr[hi] && arr[medianator[i]]>=arr[lo]){
-                piv = medianator[i];
-            }
-            if(arr[medianator[i]]>=arr[hi]){
-                hi = medianator[i];
-            }
-            if(arr[medianator[i]]<=arr[lo]){
-                lo = medianator[i];
-            }
-        }
-        //System.out.println(arr[medianator[0]]+";"+arr[medianator[1]]+";"+arr[medianator[2]]+" : "+piv+" : "+arr[piv]);
-        return piv;
     }
    
     

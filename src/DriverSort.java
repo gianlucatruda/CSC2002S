@@ -15,9 +15,9 @@ public class DriverSort {
     public static void main(String[] args) throws IOException{
         //Initialising important variables and assigning them default values
         String SORT = "Quicksort";
-        int ARRAYSIZEMIN = 100000;
-        int ARRAYSIZEMAX = 1000000;
-        int ARRAYSIZEINCR = 100000;
+        int ARRAYSIZEMIN = 1000000;
+        int ARRAYSIZEMAX = 10000000;
+        int ARRAYSIZEINCR = 1000000;
         String OUTFILENAME = "data.txt";
         
         //Getting the commandline arguments from the user
@@ -54,12 +54,12 @@ public class DriverSort {
                 System.gc();
                 //If statements to run the appropriate sort based on user parameters from command line
                 if(SORT.equals("Quicksort") || SORT.equals("quicksort")){
-                    QuicksortParallel qsp = new QuicksortParallel(arr,(int)(250000));
+                    QuicksortParallel qsp = new QuicksortParallel(arr,(int)(arraySize/8));
                     tick = getTime();
                     qsp.compute();
                 }
                 if(SORT.equals("Mergesort") || SORT.equals("mergesort")){
-                    MergesortParallel msp = new MergesortParallel(arr, 0, arraySize, (int)(2500000));
+                    MergesortParallel msp = new MergesortParallel(arr, 0, arraySize, (int)(arraySize/4));
                     tick = getTime();
                     msp.compute();
                 }

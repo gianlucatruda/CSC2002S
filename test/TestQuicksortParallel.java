@@ -28,25 +28,27 @@ public class TestQuicksortParallel {
         final int THRESH = 200000;
         Random rand = new Random();
         int[] sampleArr = {27, 43, 3, 9, 82, 10, 38};
-        QuicksortParallel QSP = new QuicksortParallel(sampleArr, 2);
+        QuicksortParallel QSP = new QuicksortParallel(sampleArr, 4);
         QSP.compute();
         System.out.println(Arrays.toString(sampleArr)+"\n\n");
-        /*
+        
         int[] arr = new int[ARRLEN];
         for(int i=0; i<ARRLEN; i++){
             arr[i]=rand.nextInt(ARRLEN);
         }
         int[] sysArr = arr.clone();
         Arrays.sort(sysArr);
-        QuicksortParallel qsp = new QuicksortParallel(arr, 0, ARRLEN, THRESH);
+        QuicksortParallel qsp = new QuicksortParallel(arr, THRESH);
         qsp.compute();
         int trueCount = 0;
         for(int i=0; i<ARRLEN; i++){
             if(sysArr[i]==arr[i]){trueCount++;}
         }
         System.out.println("Correctness: "+(trueCount*100/ARRLEN)+"%");
+        System.out.println(Arrays.toString(arr));
         assert(Arrays.equals(sysArr, arr));
-        **/
+        
+        
     }
 
  }
