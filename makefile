@@ -30,16 +30,20 @@ vpath %.class $(BINDIR):
 #default rule - will be invoked by make
 
 
-all: 	MergesortParallel.class QuicksortParallel.class AltsortParallel.class \
+all: 	PrefixSumParallel.class \
+		MergesortParallel.class QuicksortParallel.class \
 		DriverSort.class \
-		TestMergesortParallel.class TestQuicksortParallel.class TestAltsortParallel.class \
+		TestMergesortParallel.class TestQuicksortParallel.class  \
 		
 # Rules for generating documentation
 doc:
 	javadoc -d $(DOCDIR) $(SRCDIR)/*.java $(TESTDIR)/*.java
 
 # Rules for unit testing
-test_classes: all MergesortParallel.class AltsortParallel.class QuicksortParallel.class DriverSort.class 
+test_classes: 	all \
+				TestMergesortParallel.class TestQuicksortParallel.class \
+				TestSuite.class \
+
 
 test: test_classes
 	java -ea -cp $(BINDIR):$(JUNIT) org.junit.runner.JUnitCore TestSuite
