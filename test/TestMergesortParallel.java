@@ -1,7 +1,5 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * A JUnit test to ensure that the corresponding sorting algorithm provides the correct output.
  */
 
 import java.util.Arrays;
@@ -20,11 +18,17 @@ public class TestMergesortParallel {
         final int ARRLEN = 400000;
         final int THRESH = 200000;
         Random rand = new Random();
+        
+        //Test on a small known array
         int[] sampleArr = {27, 43, 3, 9, 82, 10, 38};
-        MergesortParallel MSP = new MergesortParallel(sampleArr, 0, 6, 4);
+        int[] sampleComp = sampleArr.clone();
+        Arrays.sort(sampleComp);
+        MergesortParallel MSP = new MergesortParallel(sampleArr, 0, sampleArr.length, 4);
         MSP.compute();
         System.out.println("Small sample: "+Arrays.toString(sampleArr)+"");
+        assert(Arrays.equals(sampleArr, sampleComp));
         
+        //Test on a large, randomised array
         int[] arr = new int[ARRLEN];
         for(int i=0; i<ARRLEN; i++){
             arr[i]=rand.nextInt(ARRLEN);

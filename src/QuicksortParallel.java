@@ -68,13 +68,16 @@ public class QuicksortParallel extends RecursiveAction{
         QuicksortParallel leftKid = new QuicksortParallel(left, this.thresh);
         QuicksortParallel rightKid = new QuicksortParallel(right, this.thresh);
         
+        //Parallelisation by dividing the array roughly in half and recursively sorting each half in individual threads.
         invokeAll(leftKid, rightKid);
+        //Copying the sorted sub-arrays into the main array to conclude with a sorted array.
         System.arraycopy(left, 0, this.arr, 0, left.length);
         for (int i = 0; i < right.length; i++) {
             this.arr[i+left.length] = right[i];
         }
     }
     
+    //Takes in the bit vector and a blank array, then writes the bit-sum values to the blank array.
     private void serialPrefixSum(int[] in, int[] out){
         int sum = 0;
         for (int i = this.begin; i <=this.end; i++) {
@@ -113,6 +116,7 @@ public class QuicksortParallel extends RecursiveAction{
     
     /**
      * A pack algorithm using the bit-bitsum-output method to enable parallelization.
+     * Although this works, it "over-parallelises" and thus is not suitable for large N values.
      */
     private void parallelSort(int val){
         int[] bits = new int[end+1];
@@ -125,18 +129,13 @@ public class QuicksortParallel extends RecursiveAction{
                 bits[i] = 0;
             }
         }
-        
         //Parallelised Prefix-Sum Algorithm
         int psThresh;
         if(thresh >= 8){psThresh = thresh/2;}
         else{psThresh = 4;}       
-        
         PrefixSumParallel pfp = new PrefixSumParallel(bits, bitsum, 0, arr.length, null, psThresh, true);
         invokeAll(pfp);
-        
-        pfp.apply();
-       
-        
+        pfp.apply();      
         //Create and populate the array of items greater than pivot value
         int[] right = new int[bitsum[bitsum.length-1]];
         int[] left = new int[(end)-right.length];
@@ -149,7 +148,6 @@ public class QuicksortParallel extends RecursiveAction{
                 left[count++] = arr[i];
             }
         }
-        
         if(left.length >= 2 && right.length >= 2){
             invokeAll(  new QuicksortParallel(left, thresh),
                         new QuicksortParallel(right, thresh));
@@ -160,13 +158,10 @@ public class QuicksortParallel extends RecursiveAction{
         else if(right.length >= 2){
             invokeAll(new QuicksortParallel(right, thresh));
         }
-
         int[] out = new int[left.length+right.length];
         System.arraycopy(left, 0, out, 0, left.length);
         System.arraycopy(right, 0, out, left.length, right.length);
         System.out.println("out: "+ Arrays.toString(out));
         this.arr = out.clone();
     }
-   
-    
 }

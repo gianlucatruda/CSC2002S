@@ -1,26 +1,16 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * A JUnit test to ensure that the corresponding sorting algorithm provides the correct output.
  */
 
 import java.util.Arrays;
 import java.util.Random;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 /**
  *
  * @author gianlucatruda
  */
 public class TestQuicksortParallel {
-    
-    public TestQuicksortParallel() {
-    }
 
     @Test
     public void testCompute() {
@@ -28,11 +18,17 @@ public class TestQuicksortParallel {
         final int ARRLEN = 400000;
         final int THRESH = 200000;
         Random rand = new Random();
+        
+        //Test on a small known array
         int[] sampleArr = {27, 43, 3, 9, 82, 10, 38};
+        int[] sampleComp = sampleArr.clone();
+        Arrays.sort(sampleComp);
         QuicksortParallel QSP = new QuicksortParallel(sampleArr, 4);
         QSP.compute();
         System.out.println("Small sample: "+Arrays.toString(sampleArr)+"");
+        assert(Arrays.equals(sampleArr, sampleComp));
         
+        //Test on a large, randomised array
         int[] arr = new int[ARRLEN];
         for(int i=0; i<ARRLEN; i++){
             arr[i]=rand.nextInt(ARRLEN);
@@ -48,8 +44,7 @@ public class TestQuicksortParallel {
         System.out.println("Large sample (400 000 vals) - Correctness: "+(trueCount*100/ARRLEN)+"%");
         //System.out.println(Arrays.toString(arr));
         assert(Arrays.equals(sysArr, arr));
-        
-        
+
     }
 
  }

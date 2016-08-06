@@ -5,7 +5,7 @@ import java.io.PrintWriter;
 import java.io.IOException;
 
 /**
- *
+ * Parallel Programming Assignment for CSC2002S
  * @author gianlucatruda
  * Created 26 July 2016
  */
@@ -36,8 +36,7 @@ public class DriverSort {
         
         System.out.println("\nInstance : " + SORT +"; " + ARRAYSIZEMIN +"; " + ARRAYSIZEMAX +"; " + ARRAYSIZEINCR +"; " + OUTFILENAME +"; " +THRESHVAL+"\n"+"Time(ms)");
         writeToFile(OUTFILENAME, "\n"+SORT +"; " + ARRAYSIZEMIN +"; " + ARRAYSIZEMAX +"; " + ARRAYSIZEINCR +"; " + OUTFILENAME +"; "+ THRESHVAL); 
-        
-        
+
         //Variables to implement across all testing
         int[] arr;
         long tick = 0;
@@ -72,16 +71,18 @@ public class DriverSort {
                     tick = getTime();
                     Arrays.sort(arr);
                 }
-                
+                //Code to call a timeout on anything that runs longer than 60 seconds on one sort.
                 int duration = (int)(getTime() - tick);
                 if(duration > 60000){
                     best = 60000;
                     System.exit(duration);
                 }
+                //Code to keep track of the best time recorded for the set at that specific N.
                 if(duration < best){
                     best = duration;
                 }
             }
+            
             outText+= best;
             System.out.println(outText);
             writeToFile(OUTFILENAME, outText);
@@ -97,6 +98,13 @@ public class DriverSort {
         return System.currentTimeMillis();
     }
     
+    
+    /**
+     * Simple function that can write text to a .txt file for review and data collection.
+     * @param filename
+     * @param text
+     * @throws IOException 
+     */
     public static void writeToFile(String filename, String text) throws IOException{
         FileWriter fw = new FileWriter(filename, true);
         try (PrintWriter pw = new PrintWriter(fw)) {
