@@ -2,7 +2,7 @@
 # Gianluca Truda
 # July 2016
 
-LIB = ../lib
+LIB = lib
 SRCDIR = src
 BINDIR = bin
 TESTDIR = test

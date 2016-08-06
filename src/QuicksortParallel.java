@@ -5,7 +5,9 @@ import java.util.Random;
 /**
  * A quicksort algorithm that uses Java's lightweight threads from the Fork/Join Framework
  * to implement parallelism for the purpose of speedup.
- * Both the recursive call step AND the partitioning step are parallelized!
+ * Initially, both the recursive call step AND the partitioning step are parallelized!
+ * Due to stack overflow and the sufficient performance upgrade of just parallelizing the recursive step,
+ * the partitioning step has now been made sequential.
  * @author gianlucatruda
  * Created 26 July 2016
  */
@@ -21,8 +23,6 @@ public class QuicksortParallel extends RecursiveAction{
         this.begin = 0;
         this.end = arr.length;
         this.thresh = thresh;
-        
-        //System.out.println("QS");
 }
     //Override for the compute() method implemented from RecursiveAction
     @Override
@@ -56,8 +56,6 @@ public class QuicksortParallel extends RecursiveAction{
         int[] left = new int[bitsum.length-right.length-1];
         
         int count = 0;
-        //System.out.println(Arrays.toString(bits));
-        //System.out.println(Arrays.toString(bitsum));
         for (int i = 0; i <arr.length; i++){          
             if(bits[i]==1){
                 right[bitsum[i]-1] = arr[i];
@@ -71,15 +69,10 @@ public class QuicksortParallel extends RecursiveAction{
         QuicksortParallel rightKid = new QuicksortParallel(right, this.thresh);
         
         invokeAll(leftKid, rightKid);
-        
-        //System.out.println(Arrays.toString(left) + " : "+pivVal+" : "+Arrays.toString(right));
-        
-        //System.out.println("Left = "+left.length+" right = " + right.length+" left+right = "+(left.length+right.length)+" Arr = "+arr.length);
         System.arraycopy(left, 0, this.arr, 0, left.length);
         for (int i = 0; i < right.length; i++) {
             this.arr[i+left.length] = right[i];
         }
-        
     }
     
     private void serialPrefixSum(int[] in, int[] out){
@@ -88,10 +81,8 @@ public class QuicksortParallel extends RecursiveAction{
             sum+=in[i];
             out[i]=sum;
         }
-    
     }
-    
-    
+
     /**
      * Estimates the median of the array in O(c) time and returns the index of the median.
      * @return pivot
@@ -117,7 +108,6 @@ public class QuicksortParallel extends RecursiveAction{
                 lo = medianator[i];
             }
         }
-        //System.out.println(arr[medianator[0]]+";"+arr[medianator[1]]+";"+arr[medianator[2]]+" : "+piv+" : "+arr[piv]);
         return piv;
     }
     
@@ -139,9 +129,7 @@ public class QuicksortParallel extends RecursiveAction{
         //Parallelised Prefix-Sum Algorithm
         int psThresh;
         if(thresh >= 8){psThresh = thresh/2;}
-        else{psThresh = 4;}
-        //System.out.println(psThresh+" "+this.begin+" "+this.end);
-        
+        else{psThresh = 4;}       
         
         PrefixSumParallel pfp = new PrefixSumParallel(bits, bitsum, 0, arr.length, null, psThresh, true);
         invokeAll(pfp);
@@ -154,7 +142,6 @@ public class QuicksortParallel extends RecursiveAction{
         int[] left = new int[(end)-right.length];
         int count = 0;
         for (int i = 0; i <arr.length; i++){          
-            //System.out.println("i: "+i+"\tbits[i]: "+bits[i]+"\tarr[i]: "+arr[i]+"\tcount: "+count+"\tleft.len: "+left.length);
             if(bits[i]==1){
                 right[bitsum[i]-1] = arr[i];
             }
@@ -173,8 +160,7 @@ public class QuicksortParallel extends RecursiveAction{
         else if(right.length >= 2){
             invokeAll(new QuicksortParallel(right, thresh));
         }
-        
-        //System.out.println(Arrays.toString(left)+"-"+val+"-"+Arrays.toString(right));
+
         int[] out = new int[left.length+right.length];
         System.arraycopy(left, 0, out, 0, left.length);
         System.arraycopy(right, 0, out, left.length, right.length);
